@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <section class="">
+        <div class="container">
+            <div class="row justify-content-center align-items-center vh-100">
+                <div class="col-6">
+                    <div class="bg-secondary p-5">
+                        <h2 class="text-center mb-4">Recipe World</h2>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Recipe Title</label>
+                            <input type="text" class="form-control" id="title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ingredients" class="form-label">Ingredients</label>
+                            <input type="text" class="form-control" id="ingredients">
+                        </div>
+                        <div class="mb-3">
+                            <label for="instructions" class="form-label">Instructions</label>
+                            <input type="text" class="form-control" id="instructions">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cuisine">Cuisine Type</label>
+                            <select name="cuisine" id="cuisine" class="form-select">
+                                <option value="">Select Cuisine</option>
+                                <option value="Italian">Italian</option>
+                                <option value="Chinese">Chinese</option>
+                                <option value="North Indian">North Indian</option>
+                            </select>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary" id="submit-btn">Add Reciep</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let updateIdx;
+        let editRecipe;
+        let recipe = JSON.parse(localStorage.getItem("recipe")) || [];
+
+        document.getElementById("submit-btn").addEventListener("click", function (e) {
+            e.preventDefault();
+
+            let title = document.getElementById("title").value;
+            let ingredients = document.getElementById("ingredients").value;
+            let instructions = document.getElementById("instructions").value;
+            let cuisine = document.getElementById("cuisine").value;
+
+            if (title.trim() === "" || ingredients.trim() === "" || instructions.trim() === "" || cuisine.trim() === "") {
+                alert("Enter All Field");
+                return;
+            }
+
+            if (updateIdx !== null) {
+                recipe[updateIdx].title = title;
+                recipe[updateIdx].ingredients = ingredients;
+                recipe[updateIdx].instructions = instructions;
+                recipe[updateIdx].cuisine = cuisine;
+            } else {
+                let item = {
+                    title, ingredients, instructions, cuisine
+                }
+
+                recipe.push(item);
+            }
+
+            localStorage.setItem("recipe", JSON.stringify(recipe));
+            window.location.href = "recipe.html";
+        })
+
+        document.addEventListener("DOMContentLoaded", function () {
+            updateIdx = JSON.parse(localStorage.getItem("updateIdx"));
+            editRecipe = recipe[updateIdx];
+
+            if (updateIdx !== null) {
+                document.getElementById("submit-btn").innerHTML = "Update";
+
+                document.getElementById("title").value = editRecipe.title;
+                document.getElementById("ingredients").value = editRecipe.ingredients;
+                document.getElementById("instructions").value = editRecipe.instructions;
+                document.getElementById("cuisine").value = editRecipe.cuisine;
+            }
+        })
+    </script>
+</body>
+
+</html>
